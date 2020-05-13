@@ -1,6 +1,6 @@
 # webkit_inspection_protocol.dart
 
-## 0.6.0
+## 0.5.4
 - Add `onSend` and `onReceive` in `WipConnection` 
 - Expose `onExecutionContextCreated`, `onExecutionContextDestroyed`,
   and `onExecutionContextsCleared` on WipRuntime
