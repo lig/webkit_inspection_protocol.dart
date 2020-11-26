@@ -28,11 +28,11 @@ class WipDom extends WipDomain {
   Future hideHighlight() => sendCommand('DOM.hideHighlight');
 
   Future highlightNode(int nodeId,
-      {Rgba borderColor,
-      Rgba contentColor,
-      Rgba marginColor,
-      Rgba paddingColor,
-      bool showInfo}) {
+      {Rgba? borderColor,
+      Rgba? contentColor,
+      Rgba? marginColor,
+      Rgba? paddingColor,
+      bool? showInfo}) {
     var params = <String, dynamic>{'nodeId': nodeId, 'highlightConfig': {}};
 
     if (borderColor != null) {
@@ -59,7 +59,7 @@ class WipDom extends WipDomain {
   }
 
   Future highlightRect(int x, int y, int width, int height,
-      {Rgba color, Rgba outlineColor}) {
+      {Rgba? color, Rgba? outlineColor}) {
     var params = <String, dynamic>{
       'x': x,
       'y': y,
@@ -79,7 +79,7 @@ class WipDom extends WipDomain {
   }
 
   Future<int> moveTo(int nodeId, int targetNodeId,
-      {int insertBeforeNodeId}) async {
+      {int? insertBeforeNodeId}) async {
     var params = {'nodeId': nodeId, 'targetNodeId': targetNodeId};
 
     if (insertBeforeNodeId != null) {
@@ -118,7 +118,7 @@ class WipDom extends WipDomain {
     return resp.result['nodeId'] as int;
   }
 
-  Future<RemoteObject> resolveNode(int nodeId, {String objectGroup}) async {
+  Future<RemoteObject> resolveNode(int nodeId, {String? objectGroup}) async {
     var params = <String, dynamic>{'nodeId': nodeId};
     if (objectGroup != null) {
       params['objectGroup'] = objectGroup;
@@ -132,7 +132,7 @@ class WipDom extends WipDomain {
       sendCommand('DOM.setAttributeValue',
           params: {'nodeId': nodeId, 'name': name, 'value': value});
 
-  Future setAttributesAsText(int nodeId, String text, {String name}) {
+  Future setAttributesAsText(int nodeId, String text, {String? name}) {
     var params = {'nodeId': nodeId, 'text': text};
     if (name != null) {
       params['name'] = name;
@@ -227,13 +227,13 @@ class ChildNodeInsertedEvent extends WipEvent {
   int get parentNodeId => params['parentNodeId'] as int;
 
   int get previousNodeId => params['previousNodeId'] as int;
-  Node _node;
+  Node? _node;
 
   Node get node {
     if (_node == null) {
       _node = new Node(params['node'] as Map<String, dynamic>);
     }
-    return _node;
+    return _node!;
   }
 }
 
@@ -271,28 +271,28 @@ class Node {
 
   Node(this._map);
 
-  Map<String, String> _attributes;
+  Map<String, String>? _attributes;
 
   Map<String, String> get attributes {
     if (_attributes == null && _map.containsKey('attributes')) {
       _attributes = _attributeListToMap((_map['attributes'] as List).cast());
     }
-    return _attributes;
+    return _attributes!;
   }
 
   int get childNodeCount => _map['childNodeCount'] as int;
 
-  List<Node> _children;
+  List<Node>? _children;
 
   List<Node> get children {
     if (_children == null && _map.containsKey('children')) {
       _children = new UnmodifiableListView((_map['children'] as List)
           .map((c) => new Node(c as Map<String, dynamic>)));
     }
-    return _children;
+    return _children!;
   }
 
-  Node get contentDocument {
+  Node? get contentDocument {
     if (_map.containsKey('contentDocument')) {
       return new Node(_map['contentDocument'] as Map<String, dynamic>);
     }
@@ -327,7 +327,7 @@ class Node {
 }
 
 class Rgba {
-  final int a;
+  final int? a;
   final int b;
   final int r;
   final int g;
@@ -337,7 +337,7 @@ class Rgba {
   Map toJson() {
     var json = {'r': r, 'g': g, 'b': b};
     if (a != null) {
-      json['a'] = a;
+      json['a'] = a!;
     }
     return json;
   }
