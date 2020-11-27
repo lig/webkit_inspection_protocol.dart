@@ -43,7 +43,7 @@ class WipTarget extends WipDomain {
   @experimental
   Future<WipResponse> exposeDevToolsProtocol(
     String targetId, {
-    String bindingName,
+    String? bindingName,
   }) {
     final Map<String, dynamic> params = {'targetId': targetId};
     if (bindingName != null) {
