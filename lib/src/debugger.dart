@@ -32,12 +32,12 @@ class WipDebugger extends WipDomain {
 
   Future<WipResponse> resume() => sendCommand('Debugger.resume');
 
-  Future<WipResponse> stepInto({Map<String, dynamic> params}) =>
+  Future<WipResponse> stepInto({Map<String, dynamic>? params}) =>
       sendCommand('Debugger.stepInto', params: params);
 
   Future<WipResponse> stepOut() => sendCommand('Debugger.stepOut');
 
-  Future<WipResponse> stepOver({Map<String, dynamic> params}) =>
+  Future<WipResponse> stepOver({Map<String, dynamic>? params}) =>
       sendCommand('Debugger.stepOver', params: params);
 
   Future<WipResponse> setPauseOnExceptions(PauseState state) {
@@ -53,7 +53,7 @@ class WipDebugger extends WipDomain {
   ///    evaluates to true.
   Future<SetBreakpointResponse> setBreakpoint(
     WipLocation location, {
-    String condition,
+    String? condition,
   }) async {
     Map<String, dynamic> params = {
       'location': location.toJsonMap(),
@@ -88,7 +88,7 @@ class WipDebugger extends WipDomain {
   Future<RemoteObject> evaluateOnCallFrame(
     String callFrameId,
     String expression, {
-    bool returnByValue,
+    bool? returnByValue,
   }) async {
     Map<String, dynamic> params = {
       'callFrameId': callFrameId,
@@ -120,8 +120,8 @@ class WipDebugger extends WipDomain {
   ///   (non-nested) function as start.
   Future<List<WipBreakLocation>> getPossibleBreakpoints(
     WipLocation start, {
-    WipLocation end,
-    bool restrictToFunction,
+    WipLocation? end,
+    bool? restrictToFunction,
   }) async {
     Map<String, dynamic> params = {
       'start': start.toJsonMap(),
@@ -223,13 +223,13 @@ class DebuggerPausedEvent extends WipEvent {
   Object get data => params['data'];
 
   /// Hit breakpoints IDs (optional).
-  List<String> get hitBreakpoints {
+  List<String>? get hitBreakpoints {
     if (params['hitBreakpoints'] == null) return null;
     return (params['hitBreakpoints'] as List).cast<String>();
   }
 
   /// Async stack trace, if any.
-  StackTrace get asyncStackTrace => params['asyncStackTrace'] == null
+  StackTrace? get asyncStackTrace => params['asyncStackTrace'] == null
       ? null
       : StackTrace(params['asyncStackTrace']);
 
@@ -270,7 +270,7 @@ class WipCallFrame {
   /// The value being returned, if the function is at return point.
   ///
   /// (optional)
-  RemoteObject get returnValue {
+  RemoteObject? get returnValue {
     return json.containsKey('returnValue')
         ? new RemoteObject(json['returnValue'] as Map<String, dynamic>)
         : null;
@@ -284,7 +284,7 @@ class WipLocation {
 
   WipLocation(this.json);
 
-  WipLocation.fromValues(String scriptId, int lineNumber, {int columnNumber})
+  WipLocation.fromValues(String scriptId, int lineNumber, {int? columnNumber})
       : json = {} {
     json['scriptId'] = scriptId;
     json['lineNumber'] = lineNumber;
@@ -352,7 +352,7 @@ class WipBreakLocation extends WipLocation {
   WipBreakLocation(Map<String, dynamic> json) : super(json);
 
   WipBreakLocation.fromValues(String scriptId, int lineNumber,
-      {int columnNumber, String type})
+      {int? columnNumber, String? type})
       : super.fromValues(scriptId, lineNumber, columnNumber: columnNumber) {
     if (type != null) {
       json['type'] = type;
