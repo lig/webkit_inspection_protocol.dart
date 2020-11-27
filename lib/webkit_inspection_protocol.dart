@@ -44,8 +44,8 @@ class ChromeConnection {
         (jsonDecode(respBody) as List).map((m) => new ChromeTab(m as Map)));
   }
 
-  Future<ChromeTab> getTab(bool accept(ChromeTab tab),
-      {Duration retryFor}) async {
+  Future<ChromeTab?> getTab(bool accept(ChromeTab tab),
+      {Duration? retryFor}) async {
     var start = new DateTime.now();
     var end = start;
     if (retryFor != null) {
@@ -124,31 +124,31 @@ class WipConnection {
 
   int _nextId = 0;
 
-  WipConsole _console; // ignore: deprecated_member_use
+  late WipConsole _console; // ignore: deprecated_member_use
   @Deprecated('This domain is deprecated - use Runtime or Log instead')
   WipConsole get console => _console;
 
-  WipDebugger _debugger;
+  late WipDebugger _debugger;
 
   WipDebugger get debugger => _debugger;
 
-  WipDom _dom;
+  late WipDom _dom;
 
   WipDom get dom => _dom;
 
-  WipPage _page;
+  late WipPage _page;
 
   WipPage get page => _page;
 
-  WipTarget _target;
+  late WipTarget _target;
 
   WipTarget get target => _target;
 
-  WipLog _log;
+  late WipLog _log;
 
   WipLog get log => _log;
 
-  WipRuntime _runtime;
+  late WipRuntime _runtime;
 
   WipRuntime get runtime => _runtime;
 
@@ -198,7 +198,7 @@ class WipConnection {
   String toString() => url;
 
   Future<WipResponse> sendCommand(String method,
-      [Map<String, dynamic> params]) {
+      [Map<String, dynamic>? params]) {
     var completer = new Completer<WipResponse>();
     var json = {'id': _nextId++, 'method': method};
     if (params != null) {
@@ -290,7 +290,7 @@ abstract class WipDomain {
   final Map<String, Stream> _eventStreams = {};
 
   final WipConnection connection;
-  Stream<WipDomain> _onClosed;
+  late Stream<WipDomain> _onClosed;
 
   Stream<WipDomain> get onClosed => _onClosed;
 
@@ -318,7 +318,7 @@ abstract class WipDomain {
 
   Future<WipResponse> sendCommand(
     String method, {
-    Map<String, dynamic> params,
+    Map<String, dynamic>? params,
   }) {
     return connection.sendCommand(method, params);
   }
